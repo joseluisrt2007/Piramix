@@ -2,51 +2,43 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tus Reales</title>
   
-  <!-- Fuentes -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet" />
-  
-  <!-- CSS individual -->
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Outfit:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="reales.css" />
 </head>
 <body>
+
   <header>
     <button class="back-button" onclick="goBack()" aria-label="Regresar">⟵</button>
     <div class="header-title">Tus Reales</div>
   </header>
 
-  <div class="map-container fullscreen">
-    <div class="card fullscreen-card active">
-      <div class="question-container fullscreen-container">
-        <!-- Contador Principal -->
-        <div class="real-count-container">
-          <h1>Tus Reales Acumulados</h1>
-          <p id="real-count">Cargando...</p>
-        </div>
+  <div class="main-area">
+    <div class="content-wrapper">
 
-        <!-- Barra de Progreso -->
-        <div class="progress-container" id="progress-container">
-          <div class="progress-label" id="next-badge">Siguiente: ¡Primer Real!</div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill"></div>
-          </div>
-        </div>
+      <div class="real-count-container">
+        <h1>Tus Reales Acumulados</h1>
+        <p id="real-count">Cargando...</p>
+      </div>
 
-        <!-- Sección de Insignias -->
-        <div class="badges-section">
-          <h2 class="badges-title">Insignias</h2>
-          <div class="badges-grid" id="badges-container">
-            <!-- Insignias generadas por JavaScript -->
-          </div>
+      <div class="progress-container">
+        <div class="progress-label" id="next-badge">Siguiente: ¡Primer Real!</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
         </div>
       </div>
+
+      <div class="badges-section">
+        <h2 class="badges-title">Insignias</h2>
+        <div class="badges-grid" id="badges-container"></div>
+      </div>
+
     </div>
   </div>
 
   <script>
-    // Sistema de insignias
     const BADGES = [
       { id: 1, name: 'Benito Juárez', image: 'imagenes/i1.png', required: 1, desc: 'Defensor del Estado laico, la soberanía y las Leyes de Reforma.' },
       { id: 2, name: 'Miguel Hidalgo y Costilla', image: 'imagenes/i2.png', required: 100, desc: 'Iniciador de la Independencia; Padre de la Patria.' },
@@ -85,154 +77,75 @@
       { id: 35, name: 'Moctezuma Xocoyotzin', image: 'imagenes/i35.png', required: 3400, desc: 'Gobernante mexica durante la llegada de los españoles; figura clave del fin del imperio.' }
     ];
 
-    // Recuperar datos desde localStorage
     let realCount = parseInt(localStorage.getItem('realCount') || '0');
     let unlockedBadges = JSON.parse(localStorage.getItem('unlockedBadges') || '[]');
 
-    // Inicializar y validar localStorage
-    function initializeStorage() {
-      try {
-        unlockedBadges = unlockedBadges.filter(id => {
-          const badge = BADGES.find(b => b.id === id);
-          return badge && realCount >= badge.required;
-        });
-        localStorage.setItem('unlockedBadges', JSON.stringify(unlockedBadges));
-        
-        if (isNaN(realCount) || realCount < 0) {
-          realCount = 0;
-          localStorage.setItem('realCount', '0');
-        }
-      } catch (error) {
-        console.error('Error al inicializar localStorage:', error);
-        localStorage.setItem('unlockedBadges', '[]');
-        localStorage.setItem('realCount', '0');
-        realCount = 0;
-        unlockedBadges = [];
-      }
-    }
-
-    // Actualizar contador principal
     document.getElementById('real-count').textContent = `${realCount.toLocaleString()} Reales`;
 
-    // Verificar y desbloquear insignias
     function checkBadges() {
-      let newUnlocked = false;
-      unlockedBadges = unlockedBadges.filter(id => {
-        const badge = BADGES.find(b => b.id === id);
-        return badge && realCount >= badge.required;
-      });
-      BADGES.forEach(badge => {
-        if (realCount >= badge.required && !unlockedBadges.includes(badge.id)) {
-          unlockedBadges.push(badge.id);
-          newUnlocked = true;
-          showNotification(`¡Nueva insignia! ${badge.name}`);
+      let nuevo = false;
+      BADGES.forEach(b => {
+        if (realCount >= b.required && !unlockedBadges.includes(b.id)) {
+          unlockedBadges.push(b.id);
+          nuevo = true;
+          showNotification(`¡Nueva insignia! ${b.name}`);
         }
       });
-      if (newUnlocked) {
-        localStorage.setItem('unlockedBadges', JSON.stringify(unlockedBadges));
-      }
+      if (nuevo) localStorage.setItem('unlockedBadges', JSON.stringify(unlockedBadges));
       renderBadges();
       updateProgress();
     }
 
-    // Renderizar insignias (con ? para bloqueadas)
     function renderBadges() {
-      const container = document.getElementById('badges-container');
-      try {
-        container.innerHTML = BADGES.map(badge => {
-          const isUnlocked = unlockedBadges.includes(badge.id) && realCount >= badge.required;
-          const isNew = isUnlocked && !localStorage.getItem(`seen-${badge.id}`);
-
-          if (!isUnlocked) {
-            return `
-              <div class="badge locked" 
-                   role="button" 
-                   tabindex="0"
-                   title="Insignia bloqueada. Acumula más Reales para desbloquearla."
-                   aria-label="Insignia bloqueada">
-                <div class="badge-image locked-image">
-                  <span>?</span>
-                </div>
-                <div class="badge-name">???</div>
-              </div>
-            `;
-          }
-
-          return `
-            <div class="badge unlocked ${isNew ? 'new' : ''}" 
-                 role="button" 
-                 tabindex="0" 
-                 onclick="showBadgeDetail(${badge.id})" 
-                 onkeypress="if(event.key === 'Enter') showBadgeDetail(${badge.id})"
-                 title="${badge.desc}"
-                 aria-label="Insignia desbloqueada: ${badge.name}">
-              <img src="${badge.image}" alt="Insignia ${badge.name}" class="badge-image" 
-                   onerror="this.src='img/badge-placeholder.png'; this.alt='Imagen no disponible'">
-              <div class="badge-name">${badge.name}</div>
-            </div>
-          `;
-        }).join('');
-      } catch (error) {
-        console.error('Error al renderizar insignias:', error);
-        container.innerHTML = '<p>Error al cargar las insignias. Por favor, intenta de nuevo.</p>';
-      }
+      const c = document.getElementById('badges-container');
+      c.innerHTML = BADGES.map(b => {
+        const unlocked = unlockedBadges.includes(b.id);
+        const nuevo = unlocked && !localStorage.getItem(`seen-${b.id}`);
+        if (!unlocked) {
+          return `<div class="badge locked"><div class="badge-image locked-image">?</div><div class="badge-name">???</div></div>`;
+        }
+        return `<div class="badge unlocked ${nuevo?'new':''}" onclick="showDetail(${b.id})">
+          <img src="${b.image}" alt="${b.name}" class="badge-image" onerror="this.style.display='none'">
+          <div class="badge-name">${b.name}</div>
+        </div>`;
+      }).join('');
     }
 
-    // Actualizar barra de progreso
     function updateProgress() {
-      const nextBadge = BADGES.find(badge => !unlockedBadges.includes(badge.id));
-      const progressEl = document.getElementById('progress-fill');
-      const labelEl = document.getElementById('next-badge');
-      
-      if (nextBadge) {
-        const progress = Math.min((realCount / nextBadge.required) * 100, 100);
-        progressEl.style.width = `${progress}%`;
-        labelEl.textContent = `Siguiente: ${nextBadge.name} (${nextBadge.required.toLocaleString()})`;
+      const next = BADGES.find(b => !unlockedBadges.includes(b.id));
+      const fill = document.getElementById('progress-fill');
+      const label = document.getElementById('next-badge');
+      if (next) {
+        const pct = Math.min((realCount / next.required) * 100, 100);
+        fill.style.width = pct + '%';
+        label.textContent = `Siguiente: ${next.name} (${next.required.toLocaleString()})`;
       } else {
-        labelEl.textContent = '¡Insignias completadas! 🎉';
-        progressEl.style.width = '100%';
+        fill.style.width = '100%';
+        label.textContent = '¡Todas las insignias desbloqueadas! 🎉';
       }
     }
 
-    // Mostrar detalle de insignia (solo si desbloqueada)
-    function showBadgeDetail(badgeId) {
-      const badge = BADGES.find(b => b.id === badgeId);
-      if (!badge || !unlockedBadges.includes(badgeId) || realCount < badge.required) {
-        return;
-      }
-
-      localStorage.setItem(`seen-${badgeId}`, 'true');
+    function showDetail(id) {
+      const b = BADGES.find(x => x.id === id);
+      localStorage.setItem(`seen-${id}`, 'true');
       renderBadges();
-
-      const message = `🏆 ${badge.name}\n\n${badge.desc}\n\nReales requeridos: ${badge.required.toLocaleString()}\n¡Felicidades!`;
-      alert(message);
+      alert(`🏆 ${b.name}\n\n${b.desc}\n\nReales requeridos: ${b.required.toLocaleString()}\n¡Felicidades!`);
     }
 
-    // Notificación de nuevo desbloqueo
-    function showNotification(message) {
-      const notification = document.createElement('div');
-      notification.className = 'notification';
-      notification.textContent = message;
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.5s ease-out forwards';
-        setTimeout(() => notification.remove(), 500);
-      }, 4000);
+    function showNotification(msg) {
+      const n = document.createElement('div');
+      n.className = 'notification';
+      n.textContent = msg;
+      document.body.appendChild(n);
+      setTimeout(() => n.remove(), 5000);
     }
 
-    // Función para manejar el regreso
     function goBack() {
-      if (window.history.length > 1) {
-        history.back();
-      } else {
-        window.location.href = 'juego-virreinato.html';
-      }
+      if (history.length > 1) history.back();
+      else location.href = 'juego-virreinato.html';
     }
 
-    // Inicializar al cargar la página
-    initializeStorage();
-    checkBadges();
+    window.onload = checkBadges;
   </script>
 </body>
 </html>

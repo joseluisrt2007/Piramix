@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>HistoClick</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+  <title>PIRÁMIX</title>
+  <meta name="description" content="Explora la historia completa de México con tarjetas interactivas 3D" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Bangers&display=swap" rel="stylesheet" />
+  
   <style>
-    * {
+    /* ============================================= */
+    /* ================== RESET ==================== */
+    /* ============================================= */
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -15,55 +20,66 @@
     html, body {
       height: 100%;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
+      background: linear-gradient(135deg, #f5f3f3 0%, #f9f8f8 100%);
       color: #f8f8f2;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     body {
       display: flex;
       flex-direction: column;
-      height: 100%;
-      margin: 0;
     }
 
+    /* ============================================= */
+    /* =============== HEADER 100px ================ */
+    /* ============================================= */
     header {
-      display: linear-gradient(90deg);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: linear-gradient(90deg, #43A047 0%, #66BB6A 50%, #43A047 100%);
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      background: linear-gradient(90deg, #5a4de8, #8366f1);
-      color: #f0e9ff;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.35);
+      padding: 0 20px;
+      color: #FFFFFF;
+      font-family: 'Bangers', cursive;
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      letter-spacing: 4px;
+      text-shadow: 
+        0 0 15px #FFEB3B,
+        3px 3px 0 #1B5E20,
+        6px 6px 0 #FFEB3B;
       user-select: none;
+      box-shadow: 0 8px 30px rgba(67,160,71,0.7);
+      border-bottom: 8px solid #FFD54F;
+      z-index: 9999;
     }
 
     .header-title {
-      flex: 1;
       text-align: center;
-      user-select: none;
+      flex: 1;
     }
 
     header:hover {
-      background: linear-gradient(90deg, #8366f1, #5a4de8);
-      cursor: default;
+      background: linear-gradient(90deg, #66BB6A, #43A047);
     }
 
+    /* ============================================= */
+    /* =============== CARRUSEL 3D ================= */
+    /* ============================================= */
     .carousel {
       flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      perspective: 1200px;
-      width: 100%;
-      padding: 0 20px;
-      box-sizing: border-box;
+      perspective: 1400px;
+      padding: 120px 20px 40px 20px;
       position: relative;
       touch-action: pan-y;
-      min-height: 400px;
+      min-height: 500px;
     }
 
     .cards {
@@ -78,18 +94,20 @@
 
     .card {
       position: absolute;
-      width: 340px;
-      height: 320px;
-      transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+      width: 360px;
+      height: 340px;
+      transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
       transform-style: preserve-3d;
       user-select: none;
       z-index: 1;
       pointer-events: none;
+      border-radius: 28px;
     }
 
     .card.center {
       cursor: pointer;
       pointer-events: auto;
+      z-index: 100;
     }
 
     .card-inner {
@@ -97,7 +115,7 @@
       width: 100%;
       height: 100%;
       transform-style: preserve-3d;
-      transition: transform 0.3s ease; /* Más rápida para fluidez */
+      transition: transform 0.4s ease;
       pointer-events: auto;
     }
 
@@ -106,203 +124,134 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 20px;
-      padding: 25px;
+      border-radius: 28px;
+      padding: 30px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      text-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
-      font-size: 1.15rem;
-      background: linear-gradient(135deg, #7b3fe4, #4f46e5);
-      color: #e0d7ff;
-      filter: grayscale(100%);
+      text-align: center;
+      background: linear-gradient(135deg, #43A047 0%, #66BB6A 100%);
+      color: #FFFFFF;
+      filter: grayscale(100%) brightness(0.75);
+      border: 8px solid #FFD54F;
+      box-shadow: 0 20px 50px rgba(67,160,71,0.9);
     }
 
-    .card-front > *, .card-back > * {
-      pointer-events: none;
-    }
+    .card-front > *, .card-back > * { pointer-events: none; }
 
     .card-front img {
       width: 100%;
-      height: 180px;
+      height: 190px;
       object-fit: cover;
-      border-radius: 10px;
-      margin-top: 15px;
+      border-radius: 16px;
+      margin: 18px 0;
+      border: 6px solid #FFFFFF;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.6);
     }
 
     .card-back {
       transform: rotateY(180deg);
-      background: linear-gradient(135deg, #5a3e8f, #3a2b7a);
-      color: #c2b1ea;
-    }
-
-    .card.card-1 .card-front, .card.card-1 .card-back {
-      background: linear-gradient(135deg, #a78bfa, #6366f1);
-      color: #ffffff;
+      background: linear-gradient(135deg, #FF8A65 0%, #FFB74D 100%);
       filter: none;
     }
 
-    .card h2 {
-      font-weight: 700;
-      margin-bottom: 15px;
-      color: #d6c4a0;
-      font-size: 1.8rem;
-      text-align: center;
+    .card.center .card-front,
+    .card.center .card-back {
+      filter: none;
+      brightness: 1;
     }
 
-    .card.card-1 h2 {
-      color: #d6c4a0;
+    .card h2 {
+      font-family: 'Bangers', cursive;
+      font-size: 2.3rem;
+      color: #FFD54F;
+      text-shadow: 3px 3px 0 #1B5E20;
+      margin-bottom: 12px;
+      letter-spacing: 1.5px;
     }
 
     .card p {
-      color: #f8f8f2;
-      font-weight: 500;
-      font-size: 1.2rem;
-      text-align: center;
+      font-size: 1.18rem;
+      line-height: 1.55;
+      color: #FFFDE7;
     }
 
-    .card.card-1 p {
-      color: #f8f8f2;
-    }
+    /* Posiciones 3D */
+    .card.center { transform: translateX(0) translateZ(200px) scale(1.35); opacity: 1; }
+    .card.left   { transform: translateX(-420px) translateZ(90px) rotateY(32deg) scale(0.88); opacity: 0.65; }
+    .card.right  { transform: translateX(420px) translateZ(90px) rotateY(-32deg) scale(0.88); opacity: 0.65; }
+    .card.hidden { opacity: 0; transform: translateX(0) translateZ(0) scale(0.6); pointer-events: none; }
 
-    .card.center {
-      transform: translateX(0) translateZ(150px) rotateY(0deg) scale(1.25);
-      opacity: 1;
-      z-index: 3;
-    }
-
-    .card.left {
-      transform: translateX(-360px) translateZ(70px) rotateY(25deg) scale(0.9);
-      opacity: 0.5;
-      z-index: 2;
-    }
-
-    .card.right {
-      transform: translateX(360px) translateZ(70px) rotateY(-25deg) scale(0.9);
-      opacity: 0.5;
-      z-index: 2;
-    }
-
-    .card.hidden {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateX(0) translateZ(0) scale(0.7);
-      z-index: 1;
-    }
-
+    /* ============================================= */
+    /* =============== BOTONES ===================== */
+    /* ============================================= */
     button {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: linear-gradient(90deg, #5a4de8, #8366f1);
-      border: none;
+      background: linear-gradient(90deg, #43A047, #66BB6A);
+      border: 8px solid #FFD54F;
       color: white;
-      font-size: 2.4em;
-      width: 50px;
-      height: 75px;
+      font-size: 3.8rem;
+      width: 84px;
+      height: 84px;
       cursor: pointer;
-      border-radius: 8px;
+      border-radius: 50%;
       user-select: none;
-      z-index: 10;
-      box-shadow: 0 0 8px rgba(127, 90, 255, 0.4);
-      transition: background 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    button.btn-left {
-      left: 20px;
-    }
-
-    button.btn-right {
-      right: 20px;
-    }
+    .btn-left { left: 18px; }
+    .btn-right { right: 18px; }
 
     button:hover {
-      background: linear-gradient(90deg, #8366f1, #5a4de8);
+      background: linear-gradient(90deg, #66BB6A, #81C784);
+      transform: translateY(-50%) scale(1.25);
+      box-shadow: 0 0 70px #FFEB3B;
     }
 
-    button:active {
-      background: #4b3cc0;
-    }
-
-    /* Media Queries para móviles */
+    /* ============================================= */
+    /* =============== RESPONSIVE ================= */
+    /* ============================================= */
     @media (max-width: 768px) {
-      header {
-        font-size: clamp(1.5rem, 3vw, 2rem);
-        padding: 15px;
-      }
-      .carousel {
-        padding: 0 10px;
-        height: auto;
-        min-height: 400px;
-        perspective: none; /* Desactivar perspectiva en móviles */
-      }
-      .card {
-        width: min(85vw, 300px);
-        height: 280px;
-        font-size: 1rem;
-      }
-      .card-front img {
-        height: 140px;
-      }
-      .card h2 {
-        font-size: 1.5rem;
-      }
-      .card p {
-        font-size: 1rem;
-      }
-      .card.center {
-        transform: translateX(0) scale(1.1);
-      }
-      .card.left {
-        transform: translateX(-100vw) scale(0.9);
-      }
-      .card.right {
-        transform: translateX(100vw) scale(0.9);
-      }
-      button.btn-left, button.btn-right {
-        display: none;
-      }
-      .card.center:hover .card-inner {
-        transform: none;
-      }
+      header { height: 90px; font-size: clamp(2.4rem, 7vw, 4rem); }
+      .carousel { padding: 110px 10px 30px; }
+      .card { width: 320px; height: 300px; }
+      .card-front img { height: 160px; }
+      button { width: 70px; height: 70px; font-size: 3rem; }
     }
 
     @media (max-width: 480px) {
-      header {
-        font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-        padding: 10px;
-      }
-      .card {
-        width: min(80vw, 260px);
-        height: 240px;
-      }
-      .card-front img {
-        height: 120px;
-      }
-      .card h2 {
-        font-size: 1.3rem;
-      }
-      .card p {
-        font-size: 0.9rem;
-      }
+      header { height: 80px; }
+      .carousel { padding: 95px 5px 20px; }
+      .card { width: 280px; height: 260px; }
+      .card-front img { height: 130px; }
+      .card h2 { font-size: 1.9rem; }
+      button { width: 60px; height: 60px; font-size: 2.6rem; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="header-title">HistoClick</div>
+    <div class="header-title">PIRÁMIX</div>
   </header>
 
   <div class="carousel" id="carousel">
-    <button class="btn btn-left" aria-label="Anterior">&lt;</button>
-    <div class="cards" id="cards">
+    <button class="btn btn-left" aria-label="Anterior">〈</button>
+    <div class="cards">
 
-      <div class="card card-1 center" data-url="independencia.html" role="button" aria-label="Independencia de México">
+      <!-- 1. Independencia -->
+      <div class="card center" data-url="independencia.html">
         <div class="card-inner">
           <div class="card-front">
             <h2>Independencia de México</h2>
-            <img src="imagenesp/independencia.jpg" alt="Imagen de la Independencia de México" loading="lazy"/>
+            <img src="imagenesp/independencia.jpg" alt="Independencia" loading="lazy"/>
             <audio src="audiosp/independencia.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -313,11 +262,12 @@
         </div>
       </div>
 
-      <div class="card card-1 center" data-url="revolucion.html" role="button" aria-label="Revolución Mexicana">
+      <!-- 2. Revolución -->
+      <div class="card" data-url="revolucion.html">
         <div class="card-inner">
           <div class="card-front">
             <h2>Revolución Mexicana</h2>
-            <img src="imagenesp/revolucion.jpg" alt="Imagen de la Revolución Mexicana" loading="lazy"/>
+            <img src="imagenesp/revolucion.jpg" alt="Revolución" loading="lazy"/>
             <audio src="audiosp/revolucion.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -328,11 +278,12 @@
         </div>
       </div>
 
-      <div class="card right" data-url="" role="button" aria-label="Contenido en desarrollo">
+      <!-- 3. Conquista -->
+      <div class="card" data-url="">
         <div class="card-inner">
           <div class="card-front">
             <h2>Conquista de México</h2>
-            <img src="imagenesp/conquista.jpg" alt="Contenido en desarrollo" loading="lazy"/>
+            <img src="imagenesp/conquista.jpg" alt="Conquista" loading="lazy"/>
             <audio src="audiosp/conquista.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -343,11 +294,12 @@
         </div>
       </div>
 
-    <div class="card right" data-url="" role="button" aria-label="Contenido en desarrollo">
+      <!-- 4. Virreinato -->
+      <div class="card" data-url="">
         <div class="card-inner">
           <div class="card-front">
             <h2>Virreinato de la Nueva España</h2>
-            <img src="imagenesp/virreinato.jpg" alt="Contenido en desarrollo" loading="lazy"/>
+            <img src="imagenesp/virreinato.jpg" alt="Virreinato" loading="lazy"/>
             <audio src="audiosp/virreinato.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -356,13 +308,14 @@
             <audio src="audiosp/virreinator1.mp3" class="audio-back" preload="none"></audio>
           </div>
         </div>
-    </div>
+      </div>
 
-    <div class="card right" data-url="" role="button" aria-label="Contenido en desarrollo">
+      <!-- 5. República -->
+      <div class="card" data-url="">
         <div class="card-inner">
           <div class="card-front">
             <h2>Formación de la República</h2>
-            <img src="imagenesp/republica.jpg" alt="Contenido en desarrollo" loading="lazy"/>
+            <img src="imagenesp/republica.jpg" alt="República" loading="lazy"/>
             <audio src="audiosp/republica.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -371,13 +324,14 @@
             <audio src="audiosp/republicar1.mp3" class="audio-back" preload="none"></audio>
           </div>
         </div>
-    </div>
+      </div>
 
-    <div class="card right" data-url="" role="button" aria-label="Contenido en desarrollo">
+      <!-- 6. Reforma -->
+      <div class="card" data-url="">
         <div class="card-inner">
           <div class="card-front">
             <h2>Reforma</h2>
-            <img src="imagenesp/reforma.jpg" alt="Contenido en desarrollo" loading="lazy"/>
+            <img src="imagenesp/reforma.jpg" alt="Reforma" loading="lazy"/>
             <audio src="audiosp/reforma.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -386,13 +340,14 @@
             <audio src="audiosp/reformar1.mp3" class="audio-back" preload="none"></audio>
           </div>
         </div>
-    </div>
+      </div>
 
-    <div class="card right" data-url="" role="button" aria-label="Contenido en desarrollo">
+      <!-- 7. Porfiriato -->
+      <div class="card" data-url="">
         <div class="card-inner">
           <div class="card-front">
             <h2>Porfiriato</h2>
-            <img src="imagenesp/porfiriato.jpg" alt="Contenido en desarrollo" loading="lazy"/>
+            <img src="imagenesp/porfiriato.jpg" alt="Porfiriato" loading="lazy"/>
             <audio src="audiosp/porfiriato.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -401,13 +356,14 @@
             <audio src="audiosp/porfiriator1.mp3" class="audio-back" preload="none"></audio>
           </div>
         </div>
-    </div>
+      </div>
 
-    <div class="card right" data-url="" role="button" aria-label="Contenido en desarrollo">
+      <!-- 8. Reconstrucción -->
+      <div class="card" data-url="">
         <div class="card-inner">
           <div class="card-front">
             <h2>Reconstrucción posrevolucionaria</h2>
-            <img src="imagenesp/reconstruccion.jpg" alt="Contenido en desarrollo" loading="lazy"/>
+            <img src="imagenesp/reconstruccion.jpg" alt="Reconstrucción" loading="lazy"/>
             <audio src="audiosp/reconstruccion.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -416,13 +372,14 @@
             <audio src="audiosp/reconstruccionr1.mp3" class="audio-back" preload="none"></audio>
           </div>
         </div>
-    </div>
+      </div>
 
-    <div class="card right" data-url="" role="button" aria-label="Contenido en desarrollo">
+      <!-- 9. México moderno -->
+      <div class="card" data-url="">
         <div class="card-inner">
           <div class="card-front">
             <h2>México moderno</h2>
-            <img src="imagenesp/moderno.jpg" alt="Contenido en desarrollo" loading="lazy"/>
+            <img src="imagenesp/moderno.jpg" alt="Moderno" loading="lazy"/>
             <audio src="audiosp/moderno.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -431,13 +388,14 @@
             <audio src="audiosp/modernor1.mp3" class="audio-back" preload="none"></audio>
           </div>
         </div>
-    </div>
+      </div>
 
-    <div class="card right" data-url="" role="button" aria-label="Contenido en desarrollo">
+      <!-- 10. México contemporáneo -->
+      <div class="card" data-url="">
         <div class="card-inner">
           <div class="card-front">
             <h2>México contemporáneo</h2>
-            <img src="imagenesp/contemporaneo.jpg" alt="Contenido en desarrollo" loading="lazy"/>
+            <img src="imagenesp/contemporaneo.jpg" alt="Contemporáneo" loading="lazy"/>
             <audio src="audiosp/contemporaneo.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -446,13 +404,14 @@
             <audio src="audiosp/contemporaneor1.mp3" class="audio-back" preload="none"></audio>
           </div>
         </div>
-    </div>
+      </div>
 
-    <div class="card right" data-url="" role="button" aria-label="Contenido en desarrollo">
+      <!-- 11. Prehispánico -->
+      <div class="card" data-url="">
         <div class="card-inner">
           <div class="card-front">
             <h2>México prehispánico</h2>
-            <img src="imagenesp/prehispanico.jpg" alt="Contenido en desarrollo" loading="lazy"/>
+            <img src="imagenesp/prehispanico.jpg" alt="Prehispánico" loading="lazy"/>
             <audio src="audiosp/prehispanico.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -461,13 +420,14 @@
             <audio src="audiosp/prehispanicor1.mp3" class="audio-back" preload="none"></audio>
           </div>
         </div>
-    </div>
+      </div>
 
-    <div class="card right" data-url="" role="button" aria-label="Contenido en desarrollo">
+      <!-- 12. Antiguo -->
+      <div class="card" data-url="">
         <div class="card-inner">
           <div class="card-front">
             <h2>México antiguo</h2>
-            <img src="imagenesp/antiguo.jpg" alt="Contenido en desarrollo" loading="lazy"/>
+            <img src="imagenesp/antiguo.jpg" alt="Antiguo" loading="lazy"/>
             <audio src="audiosp/antiguo.mp3" class="audio-front" preload="none"></audio>
           </div>
           <div class="card-back">
@@ -476,204 +436,116 @@
             <audio src="audiosp/antiguor1.mp3" class="audio-back" preload="none"></audio>
           </div>
         </div>
+      </div>
+
     </div>
-
-
-    <button class="btn btn-right" aria-label="Siguiente">&gt;</button>
+    <button class="btn btn-right" aria-label="Siguiente">〉</button>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-  const cards = [...document.querySelectorAll('.card')];
-  const btnLeft = document.querySelector('.btn-left');
-  const btnRight = document.querySelector('.btn-right');
-  const carousel = document.querySelector('#carousel');
-  let current = 0;
-  let currentAudio = null;
-  let isFlipped = false;
-  let touchStartX = 0;
-  let touchEndX = 0;
-  let isTouching = false;
+      const cards = [...document.querySelectorAll('.card')];
+      const btnLeft = document.querySelector('.btn-left');
+      const btnRight = document.querySelector('.btn-right');
+      const carousel = document.querySelector('#carousel');
+      let current = 0;
+      let currentAudio = null;
+      let isFlipped = false;
+      let touchStartX = 0;
+      let isTouching = false;
 
-  function pauseAllAudios() {
-    cards.forEach(card => {
-      const audioFront = card.querySelector('.audio-front');
-      const audioBack = card.querySelector('.audio-back');
-      if (audioFront) {
-        audioFront.pause();
-        audioFront.currentTime = 0;
-      }
-      if (audioBack) {
-        audioBack.pause();
-        audioBack.currentTime = 0;
-      }
-    });
-    currentAudio = null;
-  }
-
-  function playAudioForCenterCard() {
-    if (currentAudio) {
-      currentAudio.pause();
-      currentAudio.currentTime = 0;
-    }
-
-    const centerCard = document.querySelector('.card.center');
-    if (centerCard) {
-      const audio = isFlipped ? centerCard.querySelector('.audio-back') : centerCard.querySelector('.audio-front');
-      if (audio) {
-        currentAudio = audio;
-        audio.play().catch(error => {
-          console.log(`Error al reproducir audio: ${error.message}`);
+      const pauseAllAudios = () => {
+        cards.forEach(card => {
+          ['audio-front', 'audio-back'].forEach(cls => {
+            const audio = card.querySelector(`.${cls}`);
+            if (audio) { audio.pause(); audio.currentTime = 0; }
+          });
         });
-      }
-    }
-  }
+        currentAudio = null;
+      };
 
-  function handleCardInteractions() {
-    // Limpiar eventos previos
-    cards.forEach(card => {
-      const cardInner = card.querySelector('.card-inner');
-      if (cardInner) {
-        cardInner.removeEventListener('mouseover', handleMouseOver);
-        cardInner.removeEventListener('mouseout', handleMouseOut);
-        cardInner.removeEventListener('click', handleClick);
-        cardInner.removeEventListener('touchstart', handleTouchStart);
-        cardInner.removeEventListener('touchend', handleTouchEnd);
-      }
-    });
-
-    const centerCard = document.querySelector('.card.center');
-    if (centerCard) {
-      const cardInner = centerCard.querySelector('.card-inner');
-      if (cardInner) {
-        function handleMouseOver() {
-          if (!centerCard.classList.contains('center')) return;
-          isFlipped = true;
-          cardInner.style.transform = 'rotateY(180deg)';
-          playAudioForCenterCard();
+      const playAudioForCenterCard = () => {
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+        const center = document.querySelector('.card.center');
+        if (!center) return;
+        const audio = isFlipped 
+          ? center.querySelector('.audio-back') 
+          : center.querySelector('.audio-front');
+        if (audio) {
+          currentAudio = audio;
+          audio.play().catch(() => {});
         }
+      };
 
-        function handleMouseOut(e) {
-          if (!centerCard.classList.contains('center')) return;
-          // Verificar si el cursor salió completamente de la tarjeta
-          if (!centerCard.contains(e.relatedTarget)) {
-            isFlipped = false;
-            cardInner.style.transform = 'rotateY(0deg)';
-            playAudioForCenterCard();
-          }
-        }
+      const handleCardInteractions = () => {
+        cards.forEach(card => {
+          const inner = card.querySelector('.card-inner');
+          if (inner) inner.replaceWith(inner.cloneNode(true));
+        });
 
-        function handleClick() {
-          if (!centerCard.classList.contains('center')) return;
-          if (isFlipped) {
-            const url = centerCard.getAttribute('data-url');
-            if (url) {
-              window.location.href = url;
-            }
+        const center = document.querySelector('.card.center');
+        if (!center) return;
+        const inner = center.querySelector('.card-inner');
+
+        inner.onmouseover = () => { isFlipped = true; inner.style.transform = 'rotateY(180deg)'; playAudioForCenterCard(); };
+        inner.onmouseout = (e) => { if (!center.contains(e.relatedTarget)) { isFlipped = false; inner.style.transform = 'rotateY(0deg)'; playAudioForCenterCard(); } };
+        inner.onclick = () => {
+          if (isFlipped && center.dataset.url) {
+            window.location.href = center.dataset.url;
           } else {
             isFlipped = true;
-            cardInner.style.transform = 'rotateY(180deg)';
+            inner.style.transform = 'rotateY(180deg)';
             playAudioForCenterCard();
           }
-        }
-
-        function handleTouchStart(e) {
-          if (!centerCard.classList.contains('center')) return;
-          isTouching = true;
-        }
-
-        function handleTouchEnd(e) {
-          if (!centerCard.classList.contains('center') || !isTouching) return;
+        };
+        inner.ontouchstart = () => isTouching = true;
+        inner.ontouchend = (e) => {
+          if (!isTouching) return;
           e.preventDefault();
           isTouching = false;
           if (!isFlipped) {
             isFlipped = true;
-            cardInner.style.transform = 'rotateY(180deg)';
+            inner.style.transform = 'rotateY(180deg)';
             playAudioForCenterCard();
-          } else {
-            const url = centerCard.getAttribute('data-url');
-            if (url) {
-              window.location.href = url;
-            }
+          } else if (center.dataset.url) {
+            window.location.href = center.dataset.url;
           }
-        }
+        };
+      };
 
-        cardInner.addEventListener('mouseover', handleMouseOver);
-        cardInner.addEventListener('mouseout', handleMouseOut);
-        cardInner.addEventListener('click', handleClick);
-        cardInner.addEventListener('touchstart', handleTouchStart);
-        cardInner.addEventListener('touchend', handleTouchEnd);
-      }
-    }
-  }
-
-  function updatePositions() {
-    const total = cards.length;
-    cards.forEach((card, i) => {
-      card.classList.remove('left', 'center', 'right', 'hidden');
-      const cardInner = card.querySelector('.card-inner');
-      let pos = (i - current + total) % total;
-      if (pos === 0) {
-        card.classList.add('center');
-        cardInner.style.transform = 'rotateY(0deg)';
-      } else if (pos === 1) {
-        card.classList.add('right');
-        cardInner.style.transform = 'rotateY(0deg)';
-      } else if (pos === total - 1) {
-        card.classList.add('left');
-        cardInner.style.transform = 'rotateY(0deg)';
-      } else {
-        card.classList.add('hidden');
-        cardInner.style.transform = 'rotateY(0deg)';
-      }
-    });
-    isFlipped = false;
-    pauseAllAudios();
-    handleCardInteractions();
-    playAudioForCenterCard();
-  }
-
-  btnLeft.addEventListener('click', () => {
-    current = (current - 1 + cards.length) % cards.length;
-    updatePositions();
-  });
-
-  btnRight.addEventListener('click', () => {
-    current = (current + 1) % cards.length;
-    updatePositions();
-  });
-
-  // Soporte para deslizar en móviles
-  carousel.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
-    isTouching = true;
-  });
-
-  carousel.addEventListener('touchend', e => {
-    if (!isTouching) return;
-    touchEndX = e.changedTouches[0].screenX;
-    const swipeDistance = touchEndX - touchStartX;
-    isTouching = false;
-    if (swipeDistance > 50) {
-      current = (current - 1 + cards.length) % cards.length;
-      updatePositions();
-    } else if (swipeDistance < -50) {
-      current = (current + 1) % cards.length;
-      updatePositions();
-    }
-  });
-
-  // Intento de reproducción tras interacción
-  ['click', 'touchstart'].forEach(event => {
-    document.addEventListener(event, () => {
-      if (!currentAudio || currentAudio.paused) {
+      const updatePositions = () => {
+        const total = cards.length;
+        cards.forEach((card, i) => {
+          card.classList.remove('left', 'center', 'right', 'hidden');
+          const pos = (i - current + total) % total;
+          if (pos === 0) card.classList.add('center');
+          else if (pos === 1) card.classList.add('right');
+          else if (pos === total - 1) card.classList.add('left');
+          else card.classList.add('hidden');
+          card.querySelector('.card-inner').style.transform = 'rotateY(0deg)';
+        });
+        isFlipped = false;
+        pauseAllAudios();
+        handleCardInteractions();
         playAudioForCenterCard();
-      }
-    }, { once: true });
-  });
+      };
 
-  updatePositions();
-});
+      btnLeft.onclick = () => { current = (current - 1 + cards.length) % cards.length; updatePositions(); };
+      btnRight.onclick = () => { current = (current + 1) % cards.length; updatePositions(); };
+
+      carousel.ontouchstart = e => { touchStartX = e.changedTouches[0].screenX; isTouching = true; };
+      carousel.ontouchend = e => {
+        if (!isTouching) return;
+        const diff = e.changedTouches[0].screenX - touchStartX;
+        isTouching = false;
+        if (diff > 50) { current = (current - 1 + cards.length) % cards.length; updatePositions(); }
+        else if (diff < -50) { current = (current + 1) % cards.length; updatePositions(); }
+      };
+
+      document.body.onclick = document.body.ontouchstart = () => playAudioForCenterCard();
+
+      updatePositions();
+    });
   </script>
 </body>
 </html>

@@ -4,173 +4,71 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Exploradores del Virreinato</title>
-
-  <!-- Fuentes -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet" />
-
+  
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Outfit:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="juego-estilo.css" />
 </head>
 <body>
+
+  <!-- PANTALLA DE BIENVENIDA -->
   <div class="game-welcome">
     <h1>¡Explorando la historia!</h1>
     <p>Embárcate en una aventura histórica para descubrir los secretos de la Independencia de México!</p>
     <button class="game-button" onclick="startGame()">¡Emprende la Aventura!</button>
   </div>
 
+  <!-- HEADER CON TUS EMOJIS ORIGINALES -->
   <header>
     <button class="back-button" onclick="goBack()" aria-label="Regresar">⟵</button>
     <div class="header-title">Explorando la historia</div>
     <button class="reales-button" onclick="window.location.href='reales.html'" aria-label="Ver Reales">💰</button>
   </header>
 
+  <!-- MAPA CON PREGUNTAS -->
   <div class="map-container">
-    <div class="card" data-index="0">
-      <div class="question-container">
-        <span id="level-0"></span>
-        <p id="question-text-0"></p>
-        <div id="options-0"></div>
-        <p id="feedback-0"></p>
-      </div>
-    </div>
-    <div class="card" data-index="1">
-      <div class="question-container">
-        <span id="level-1"></span>
-        <p id="question-text-1"></p>
-        <div id="options-1"></div>
-        <p id="feedback-1"></p>
-      </div>
-    </div>
-    <div class="card" data-index="2">
-      <div class="question-container">
-        <span id="level-2"></span>
-        <p id="question-text-2"></p>
-        <div id="options-2"></div>
-        <p id="feedback-2"></p>
-      </div>
-    </div>
-    <div class="card" data-index="3">
-      <div class="question-container">
-        <span id="level-3"></span>
-        <p id="question-text-3"></p>
-        <div id="options-3"></div>
-        <p id="feedback-3"></p>
-      </div>
-    </div>
-    <div class="card" data-index="4">
-      <div class="question-container">
-        <span id="level-4"></span>
-        <p id="question-text-4"></p>
-        <div id="options-4"></div>
-        <p id="feedback-4"></p>
-      </div>
-    </div>
-    <div class="card" data-index="5">
-      <div class="question-container">
-        <span id="level-5"></span>
-        <p id="question-text-5"></p>
-        <div id="options-5"></div>
-        <p id="feedback-5"></p>
-      </div>
-    </div>
-    <div class="card" data-index="6">
-      <div class="question-container">
-        <span id="level-6"></span>
-        <p id="question-text-6"></p>
-        <div id="options-6"></div>
-        <p id="feedback-6"></p>
-      </div>
-    </div>
-    <div class="card" data-index="7">
-      <div class="question-container">
-        <span id="level-7"></span>
-        <p id="question-text-7"></p>
-        <div id="options-7"></div>
-        <p id="feedback-7"></p>
-      </div>
-    </div>
-    <div class="card" data-index="8">
-      <div class="question-container">
-        <span id="level-8"></span>
-        <p id="question-text-8"></p>
-        <div id="options-8"></div>
-        <p id="feedback-8"></p>
-      </div>
-    </div>
+    <div class="card" data-index="0"><div class="question-container"><span id="level-0"></span><p id="question-text-0"></p><div id="options-0"></div><p id="feedback-0"></p></div></div>
+    <div class="card" data-index="1"><div class="question-container"><span id="level-1"></span><p id="question-text-1"></p><div id="options-1"></div><p id="feedback-1"></p></div></div>
+    <div class="card" data-index="2"><div class="question-container"><span id="level-2"></span><p id="question-text-2"></p><div id="options-2"></div><p id="feedback-2"></p></div></div>
+    <div class="card" data-index="3"><div class="question-container"><span id="level-3"></span><p id="question-text-3"></p><div id="options-3"></div><p id="feedback-3"></p></div></div>
+    <div class="card" data-index="4"><div class="question-container"><span id="level-4"></span><p id="question-text-4"></p><div id="options-4"></div><p id="feedback-4"></p></div></div>
+    <div class="card" data-index="5"><div class="question-container"><span id="level-5"></span><p id="question-text-5"></p><div id="options-5"></div><p id="feedback-5"></p></div></div>
+    <div class="card" data-index="6"><div class="question-container"><span id="level-6"></span><p id="question-text-6"></p><div id="options-6"></div><p id="feedback-6"></p></div></div>
+    <div class="card" data-index="7"><div class="question-container"><span id="level-7"></span><p id="question-text-7"></p><div id="options-7"></div><p id="feedback-7"></p></div></div>
+    <div class="card" data-index="8"><div class="question-container"><span id="level-8"></span><p id="question-text-8"></p><div id="options-8"></div><p id="feedback-8"></p></div></div>
+  </div>
+
+  <!-- VENTANA FINAL -->
+  <div class="felicidades-mini" id="felicidades-mini">
+    <h2>¡GRACIAS!</h2>
+    <button class="boton-volver" onclick="restartGame()">VOLVER A JUGAR</button>
   </div>
 
   <script>
-    let cards = [...document.querySelectorAll('.card')];
+    const cards = [...document.querySelectorAll('.card')];
     let current = 0;
     let realCount = parseInt(localStorage.getItem('realCount') || '0');
 
     const questions = [
-      {
-        question: "¿En qué año se creó el Virreinato de la Nueva España?",
-        options: ["1492", "1535", "1600", "1700"],
-        correct: 1,
-        feedback: "¡Correcto! El Virreinato se creó en 1535 tras la conquista de Tenochtitlan."
-      },
-      {
-        question: "¿Quién era el representante directo del rey de España en el Virreinato?",
-        options: ["El obispo", "El virrey", "El encomendero", "El misionero"],
-        correct: 1,
-        feedback: "¡Correcto! El virrey gobernaba en nombre del rey de España."
-      },
-      {
-        question: "¿Cuál fue la principal fuente de riqueza del Virreinato?",
-        options: ["Comercio de especias", "Minería de plata", "Pesca", "Textiles"],
-        correct: 1,
-        feedback: "¡Correcto! La minería de plata fue la principal fuente de riqueza."
-      },
-      {
-        question: "El sistema de encomiendas permitía a los españoles recibir tributo y trabajo indígena.",
-        options: ["Verdadero", "Falso"],
-        correct: 0,
-        feedback: "¡Correcto! Las encomiendas otorgaban tributo y trabajo indígena a los españoles."
-      },
-      {
-        question: "¿Qué órdenes religiosas fueron clave en la evangelización?",
-        options: ["Franciscanos, dominicos y jesuitas", "Templarios y carmelitas", "Benedictinos y agustinos", "Ninguna de las anteriores"],
-        correct: 0,
-        feedback: "¡Correcto! Los franciscanos, dominicos y jesuitas lideraron la evangelización."
-      },
-      {
-        question: "Los criollos eran españoles nacidos en América.",
-        options: ["Verdadero", "Falso"],
-        correct: 0,
-        feedback: "¡Correcto! Los criollos eran hijos de españoles nacidos en América."
-      },
-      {
-        question: "¿Qué ciudad fue la capital política y económica del Virreinato?",
-        options: ["Veracruz", "Acapulco", "Ciudad de México", "Guadalajara"],
-        correct: 2,
-        feedback: "¡Correcto! Ciudad de México fue la capital, construida sobre Tenochtitlan."
-      },
-      {
-        question: "¿Qué puertos fueron clave en la ruta comercial del Virreinato?",
-        options: ["Veracruz y Acapulco", "Havana y Cartagena", "Lima y Buenos Aires", "Sevilla y Cádiz"],
-        correct: 0,
-        feedback: "¡Correcto! Veracruz y Acapulco conectaban América con España y Asia."
-      },
-      {
-        question: "¿Qué institución educativa importante se fundó en el Virreinato?",
-        options: ["Universidad de Harvard", "Universidad de México", "Universidad de Lima", "Universidad de Salamanca"],
-        correct: 1,
-        feedback: "¡Correcto! La Universidad de México fue una institución clave."
-      }
+      { question: "¿En qué año se creó el Virreinato de la Nueva España?", options: ["1492", "1535", "1600", "1700"], correct: 1, feedback: "¡Correcto! El Virreinato se creó en 1535 tras la conquista de Tenochtitlan." },
+      { question: "¿Quién era el representante directo del rey de España en el Virreinato?", options: ["El obispo", "El virrey", "El encomendero", "El misionero"], correct: 1, feedback: "¡Correcto! El virrey gobernaba en nombre del rey de España." },
+      { question: "¿Cuál fue la principal fuente de riqueza del Virreinato?", options: ["Comercio de especias", "Minería de plata", "Pesca", "Textiles"], correct: 1, feedback: "¡Correcto! La minería de plata fue la principal fuente de riqueza." },
+      { question: "El sistema de encomiendas permitía a los españoles recibir tributo y trabajo indígena.", options: ["Verdadero", "Falso"], correct: 0, feedback: "¡Correcto! Las encomiendas otorgaban tributo y trabajo indígena a los españoles." },
+      { question: "¿Qué órdenes religiosas fueron clave en la evangelización?", options: ["Franciscanos, dominicos y jesuitas", "Templarios y carmelitas", "Benedictinos y agustinos", "Ninguna de las anteriores"], correct: 0, feedback: "¡Correcto! Los franciscanos, dominicos y jesuitas lideraron la evangelización." },
+      { question: "Los criollos eran españoles nacidos en América.", options: ["Verdadero", "Falso"], correct: 0, feedback: "¡Correcto! Los criollos eran hijos de españoles nacidos en América." },
+      { question: "¿Qué ciudad fue la capital política y económica del Virreinato?", options: ["Veracruz", "Acapulco", "Ciudad de México", "Guadalajara"], correct: 2, feedback: "¡Correcto! Ciudad de México fue la capital, construida sobre Tenochtitlan." },
+      { question: "¿Qué puertos fueron clave en la ruta comercial del Virreinato?", options: ["Veracruz y Acapulco", "Havana y Cartagena", "Lima y Buenos Aires", "Sevilla y Cádiz"], correct: 0, feedback: "¡Correcto! Veracruz y Acapulco conectaban América con España y Asia." },
+      { question: "¿Qué institución educativa importante se fundó en el Virreinato?", options: ["Universidad de Harvard", "Universidad de México", "Universidad de Lima", "Universidad de Salamanca"], correct: 1, feedback: "¡Correcto! La Universidad de México fue una institución clave." }
     ];
 
-    // Función para mezclar el array de preguntas
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
+    function shuffle(a) { 
+      for (let i = a.length - 1; i > 0; i--) { 
+        const j = Math.floor(Math.random() * (i + 1)); 
+        [a[i], a[j]] = [a[j], a[i]]; 
+      } 
     }
 
     function startGame() {
-      console.log('Iniciando juego.');
-      shuffleArray(questions); // Mezclar preguntas al iniciar
+      shuffle(questions);
       document.querySelector('.game-welcome').style.display = 'none';
       document.querySelector('.map-container').style.display = 'flex';
       updateCard();
@@ -178,114 +76,79 @@
     }
 
     function updateCard() {
-      cards.forEach((card, index) => {
-        card.classList.toggle('active', index === current);
-      });
+      cards.forEach((c, i) => c.classList.toggle('active', i === current));
     }
 
     function showQuestion() {
       if (current >= questions.length) {
-        document.querySelector('.map-container').innerHTML = `
-          <div class="final-message">
-            <h2>¡Maestro Explorador del Virreinato!</h2>
-            <p>Has conquistado todos los niveles.</p>
-            <button class="game-button" onclick="window.location.href='antecedentes-virreinato.html'">Volver al Inicio</button>
-          </div>
-        `;
+        document.querySelector('.map-container').style.display = 'none';
+        document.getElementById('felicidades-mini').classList.add('active');
         return;
       }
+
+      const q = questions[current];
       document.querySelector(`#level-${current}`).textContent = `Nivel: ${current + 1}/9`;
-      const currentQuestion = questions[current];
-      const questionText = document.querySelector(`#question-text-${current}`);
-      const optionsContainer = document.querySelector(`#options-${current}`);
-      const feedbackText = document.querySelector(`#feedback-${current}`);
+      document.querySelector(`#question-text-${current}`).textContent = q.question;
+      document.querySelector(`#options-${current}`).innerHTML = q.options.map((opt, i) => 
+        `<button class="option-button" data-index="${i}">${opt}</button>`
+      ).join('');
+      document.querySelector(`#feedback-${current}`).textContent = '';
 
-      questionText.textContent = currentQuestion.question;
-      optionsContainer.innerHTML = currentQuestion.options
-        .map((option, index) => `<button class="option-button" data-index="${index}">${option}</button>`).join('');
-      feedbackText.textContent = '';
-
-      const optionButtons = optionsContainer.querySelectorAll('.option-button');
-      optionButtons.forEach(button => {
-        button.onclick = () => checkAnswer(parseInt(button.getAttribute('data-index')));
+      document.querySelectorAll(`#options-${current} .option-button`).forEach(btn => {
+        btn.onclick = () => checkAnswer(parseInt(btn.dataset.index));
       });
     }
 
     function checkAnswer(selected) {
-      const currentQuestion = questions[current];
-      const optionButtons = document.querySelectorAll(`#options-${current} .option-button`);
-      const feedbackText = document.querySelector(`#feedback-${current}`);
-      optionButtons.forEach(button => button.disabled = true);
+      const q = questions[current];
+      const buttons = document.querySelectorAll(`#options-${current} .option-button`);
+      const feedback = document.querySelector(`#feedback-${current}`);
+      buttons.forEach(b => b.disabled = true);
 
-      if (selected === currentQuestion.correct) {
+      if (selected === q.correct) {
         realCount++;
         localStorage.setItem('realCount', realCount);
-        feedbackText.textContent = "¡Correcto! +1 Real.";
-        console.log('Respuesta correcta. Nivel:', current + 1, 'Reales:', realCount);
+        feedback.textContent = '¡Correcto! +1 Real';
+        feedback.style.color = '#FFEB3B';
         current++;
-        setTimeout(() => {
-          updateCard();
-          showQuestion();
-        }, 1000);
+        setTimeout(() => { updateCard(); showQuestion(); }, 1200);
       } else {
-        feedbackText.textContent = "¡Casi! Intenta de nuevo.";
-        optionButtons.forEach(button => button.disabled = false);
+        feedback.textContent = '¡Casi! Intenta de nuevo.';
+        feedback.style.color = '#FF5252';
+        setTimeout(() => buttons.forEach(b => b.disabled = false), 800);
       }
     }
 
+    function goBack() {
+      if (history.length > 1) history.back();
+      else location.href = 'antecedentes-virreinato.html';
+    }
+
+    // REINICIA SOLO EL JUEGO → TUS REALES NUNCA SE VAN
     function restartGame() {
-      console.log('Reiniciando juego.');
       current = 0;
-      cards.forEach((card, index) => {
-        card.querySelector(`#question-text-${index}`).textContent = '';
-        card.querySelector(`#options-${index}`).innerHTML = '';
-        card.querySelector(`#feedback-${index}`).textContent = '';
-        card.querySelector(`#level-${index}`).textContent = '';
-        card.classList.remove('active');
-      });
+      document.getElementById('felicidades-mini').classList.remove('active');
       document.querySelector('.map-container').style.display = 'flex';
+      shuffle(questions);
       updateCard();
       showQuestion();
     }
 
+    // Gestos táctiles
     let startY = 0;
-    let endY = 0;
-
-    const mapContainer = document.querySelector('.map-container');
-
-    mapContainer.addEventListener('touchstart', (e) => {
-      startY = e.touches[0].clientY;
-    }, false);
-
-    mapContainer.addEventListener('touchend', (e) => {
-      endY = e.changedTouches[0].clientY;
-      handleGesture();
-    }, false);
-
-    function handleGesture() {
-      const diffY = endY - startY;
-      if (Math.abs(diffY) > 50) {
-        if (diffY > 0 && current > 0) {
-          current--;
-          updateCard();
-          showQuestion();
-        } else if (diffY < 0 && current < questions.length - 1) {
-          current++;
-          updateCard();
-          showQuestion();
-        }
+    document.querySelector('.map-container').addEventListener('touchstart', e => startY = e.touches[0].clientY);
+    document.querySelector('.map-container').addEventListener('touchend', e => {
+      const diff = e.changedTouches[0].clientY - startY;
+      if (Math.abs(diff) > 60) {
+        if (diff > 0 && current > 0) current--;
+        else if (diff < 0 && current < questions.length - 1) current++;
+        updateCard();
+        showQuestion();
       }
-    }
+    });
 
-    // Función para manejar el regreso
-    function goBack() {
-      if (window.history.length > 1) {
-        history.back();
-      } else {
-        window.location.href = 'antecedentes-virreinato.html'; // Página por defecto si no hay historial
-      }
-    }
-
+    // Iniciar oculto
+    document.querySelector('.map-container').style.display = 'none';
     updateCard();
   </script>
 </body>
